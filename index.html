@@ -2,39 +2,227 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ID Card Registration</title>
+<title>Student ID Card System</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body {
+    margin: 0;
     font-family: Arial;
-    background: #f4f4f4;
-    padding: 20px;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: white;
 }
 
-.container {
+/* MAIN LAYOUT */
+.wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* FORM */
+.form-box {
     background: white;
+    color: black;
     padding: 20px;
-    max-width: 420px;
-    margin: auto;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-h2 {
-    text-align: center;
+    border-radius: 15px;
+    width: 320px;
 }
 
 input, button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #ccc;
 }
 
 button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* ID CARD */
+.card {
+    width: 300px;
+    height: 520px;
+    border-radius: 20px;
+    background: url("https://images.unsplash.com/photo-1523240795612-9a054b0db644") center/cover;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* DARK OVERLAY */
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+/* CONTENT CENTER */
+.content {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+}
+
+/* PHOTO */
+.photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 15px;
+    object-fit: cover;
+    border: 3px solid white;
+    margin-bottom: 15px;
+}
+
+/* TEXT */
+.name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.info {
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+/* FOOTER */
+.footer {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: gold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- FORM -->
+<div class="form-box">
+    <h2>Student Registration</h2>
+
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="student_id" placeholder="Matric / Form Number">
+    <input type="text" id="phone" placeholder="Phone Number">
+    <input type="file" id="photo">
+
+    <button onclick="submitForm()">Submit</button>
+
+    <p id="msg"></p>
+</div>
+
+<!-- ID CARD PREVIEW -->
+<div class="card">
+    <div class="overlay"></div>
+
+    <div class="content">
+        <img id="cardPhoto" class="photo">
+        <div class="name" id="cardName">FULL NAME</div>
+        <div class="info" id="cardMatric">MATRIC NUMBER</div>
+        <div class="info" id="cardPhone">PHONE NUMBER</div>
+    </div>
+
+    <div class="footer">
+        Students Display Background <br>
+        C.IPADEOLA 2026
+    </div>
+</div>
+
+</div>
+
+<script>
+// 🔗 SUPABASE CONNECTION
+const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
+const supabaseKey = "YOUR_ANON_KEY_HERE";
+
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+// LIVE PREVIEW
+document.getElementById("name").oninput = e => {
+    document.getElementById("cardName").innerText = e.target.value || "FULL NAME";
+};
+
+document.getElementById("student_id").oninput = e => {
+    document.getElementById("cardMatric").innerText = e.target.value || "MATRIC NUMBER";
+};
+
+document.getElementById("phone").oninput = e => {
+    document.getElementById("cardPhone").innerText = e.target.value || "PHONE NUMBER";
+};
+
+// SUBMIT FUNCTION
+async function submitForm() {
+
+    document.getElementById("msg").innerText = "Processing...";
+
+    const full_name = document.getElementById("name").value;
+    const student_id = document.getElementById("student_id").value;
+    const phone = document.getElementById("phone").value;
+    const file = document.getElementById("photo").files[0];
+
+    if (!file) {
+        alert("Upload photo");
+        return;
+    }
+
+    const fileName = Date.now() + "_" + file.name;
+
+    // upload image
+    const { error: uploadError } = await supabaseClient.storage
+        .from("photos")
+        .upload(fileName, file);
+
+    if (uploadError) {
+        alert("Upload failed");
+        return;
+    }
+
+    const photo_url = supabaseClient.storage
+        .from("photos")
+        .getPublicUrl(fileName).data.publicUrl;
+
+    // save data
+    const { error } = await supabaseClient
+        .from("registrations")
+        .insert([{
+            full_name,
+            student_id,
+            phone,
+            photo_url,
+            organization: "CS_DEPARTMENT"
+        }]);
+
+    if (error) {
+        document.getElementById("msg").innerText = "Error saving data";
+    } else {
+        document.getElementById("msg").innerText = "Success!";
+    }
+
+    // show photo on card
+    document.getElementById("cardPhoto").src = photo_url;
+}
+</script>
+
+</body>
+</html>button {
     background: #007bff;
     color: white;
     border: none;
