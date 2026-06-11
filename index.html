@@ -151,7 +151,7 @@ button {
 <script>
 // 🔗 SUPABASE CONNECTION
 const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
-const supabaseKey = "YOUR_ANON_KEY_HERE";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE";
 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -218,110 +218,6 @@ async function submitForm() {
 
     // show photo on card
     document.getElementById("cardPhoto").src = photo_url;
-}
-</script>
-
-</body>
-</html>button {
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #0056b3;
-}
-
-#msg {
-    text-align: center;
-    margin-top: 10px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h2>ID Card Registration</h2>
-
-<input type="text" id="name" placeholder="Full Name">
-<input type="text" id="student_id" placeholder="Matric / Form Number">
-<input type="text" id="phone" placeholder="Phone Number">
-<input type="file" id="photo" accept="image/*">
-
-<button onclick="submitForm()">Submit</button>
-
-<p id="msg"></p>
-
-</div>
-
-<script>
-// 🔗 CONNECT SUPABASE
-const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE";
-
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-// 🚀 SUBMIT FUNCTION
-async function submitForm() {
-
-    document.getElementById("msg").innerText = "Submitting...";
-
-    const full_name = document.getElementById("name").value;
-    const student_id = document.getElementById("student_id").value;
-    const phone = document.getElementById("phone").value;
-    const file = document.getElementById("photo").files[0];
-
-    if (!full_name || !student_id || !phone) {
-        alert("Please fill all fields");
-        return;
-    }
-
-    if (!file) {
-        alert("Please upload photo");
-        return;
-    }
-
-    // 📸 Upload photo to Supabase Storage
-    const fileName = Date.now() + "_" + file.name;
-
-    const { data: uploadData, error: uploadError } =
-        await supabaseClient.storage
-        .from("photos")
-        .upload(fileName, file);
-
-    if (uploadError) {
-        console.log(uploadError);
-        alert("Photo upload failed");
-        return;
-    }
-
-    // 🔗 Get public URL
-    const photo_url = supabaseClient.storage
-        .from("photos")
-        .getPublicUrl(fileName).data.publicUrl;
-
-    // 🗄️ Save to database
-    const { data, error } = await supabaseClient
-        .from("registrations")
-        .insert([
-            {
-                full_name,
-                student_id,
-                phone,
-                photo_url,
-                organization: "CS_DEPARTMENT"
-            }
-        ]);
-
-    if (error) {
-        console.log(error);
-        document.getElementById("msg").innerText = "Error saving data";
-    } else {
-        document.getElementById("msg").innerText = "✅ Registration successful!";
-    }
 }
 </script>
 
