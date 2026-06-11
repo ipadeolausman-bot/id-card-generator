@@ -2,121 +2,140 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ID Card Generator</title>
+<title>ID Card Registration</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f2f2f2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-    }
+body {
+    font-family: Arial;
+    background: #f4f4f4;
+    padding: 20px;
+}
 
-    .container {
-        display: flex;
-        gap: 30px;
-        flex-wrap: wrap;
-    }
+.container {
+    background: white;
+    padding: 20px;
+    max-width: 420px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 
-    .form-box {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        width: 300px;
-    }
+h2 {
+    text-align: center;
+}
 
-    input {
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0;
-    }
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
 
-    button {
-        width: 100%;
-        padding: 10px;
-        background: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
 
-    .card {
-        width: 320px;
-        height: 200px;
-        background: white;
-        border-radius: 10px;
-        position: relative;
-        padding: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
+button:hover {
+    background: #0056b3;
+}
 
-    .photo {
-        width: 80px;
-        height: 80px;
-        border-radius: 10px;
-        object-fit: cover;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        border: 2px solid #333;
-    }
-
-    .info {
-        margin-top: 20px;
-    }
-
-    .name {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .matric {
-        margin-top: 5px;
-    }
+#msg {
+    text-align: center;
+    margin-top: 10px;
+}
 </style>
 </head>
-<body>
 
-<h2>ID Card Generator (MVP)</h2>
+<body>
 
 <div class="container">
 
-    <div class="form-box">
-        <input type="text" id="name" placeholder="Full Name">
-        <input type="text" id="matric" placeholder="Matric Number">
-        <input type="file" id="photo" accept="image/*">
-        <button onclick="generateCard()">Generate ID Card</button>
-    </div>
+<h2>ID Card Registration</h2>
 
-    <div class="card" id="card">
-        <img id="cardPhoto" class="photo">
-        <div class="info">
-            <div class="name" id="cardName">Your Name</div>
-            <div class="matric" id="cardMatric">Matric Number</div>
-        </div>
-    </div>
+<input type="text" id="name" placeholder="Full Name">
+<input type="text" id="student_id" placeholder="Matric / Form Number">
+<input type="text" id="phone" placeholder="Phone Number">
+<input type="file" id="photo" accept="image/*">
+
+<button onclick="submitForm()">Submit</button>
+
+<p id="msg"></p>
 
 </div>
 
 <script>
-function generateCard() {
-    let name = document.getElementById("name").value;
-    let matric = document.getElementById("matric").value;
-    let photo = document.getElementById("photo").files[0];
+// 🔗 CONNECT SUPABASE
+const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE";
 
-    document.getElementById("cardName").innerText = name;
-    document.getElementById("cardMatric").innerText = matric;
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-    if (photo) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById("cardPhoto").src = e.target.result;
-        }
-        reader.readAsDataURL(photo);
+// 🚀 SUBMIT FUNCTION
+async function submitForm() {
+
+    document.getElementById("msg").innerText = "Submitting...";
+
+    const full_name = document.getElementById("name").value;
+    const student_id = document.getElementById("student_id").value;
+    const phone = document.getElementById("phone").value;
+    const file = document.getElementById("photo").files[0];
+
+    if (!full_name || !student_id || !phone) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    if (!file) {
+        alert("Please upload photo");
+        return;
+    }
+
+    // 📸 Upload photo to Supabase Storage
+    const fileName = Date.now() + "_" + file.name;
+
+    const { data: uploadData, error: uploadError } =
+        await supabaseClient.storage
+        .from("photos")
+        .upload(fileName, file);
+
+    if (uploadError) {
+        console.log(uploadError);
+        alert("Photo upload failed");
+        return;
+    }
+
+    // 🔗 Get public URL
+    const photo_url = supabaseClient.storage
+        .from("photos")
+        .getPublicUrl(fileName).data.publicUrl;
+
+    // 🗄️ Save to database
+    const { data, error } = await supabaseClient
+        .from("registrations")
+        .insert([
+            {
+                full_name,
+                student_id,
+                phone,
+                photo_url,
+                organization: "CS_DEPARTMENT"
+            }
+        ]);
+
+    if (error) {
+        console.log(error);
+        document.getElementById("msg").innerText = "Error saving data";
+    } else {
+        document.getElementById("msg").innerText = "✅ Registration successful!";
     }
 }
 </script>
 
 </body>
-  </html>
+</html>
