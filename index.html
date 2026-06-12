@@ -6,6 +6,7 @@
 <title>Student ID Card System</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
 
 <style>
 :root {
@@ -116,7 +117,7 @@ body {
     margin-bottom: 8px;
 }
 
-input[type="text"] {
+input[type="text"], input[type="email"] {
     width: 100%;
     padding: 12px 16px;
     border-radius: 8px;
@@ -126,7 +127,7 @@ input[type="text"] {
     transition: 0.2s;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, input[type="email"]:focus {
     border-color: var(--button-blue);
     box-shadow: 0 0 0 3px rgba(10, 77, 162, 0.15);
 }
@@ -172,7 +173,7 @@ input[type="text"]:focus {
 
 .submit-btn {
     width: 100%;
-    background: var(--button-blue);
+    background: #10b981; /* Green color signifies secure checkout payment processing */
     color: white;
     border: none;
     padding: 14px;
@@ -188,7 +189,7 @@ input[type="text"]:focus {
     transition: 0.2s;
 }
 .submit-btn:hover {
-    background: #083d82;
+    background: #059669;
 }
 
 .secure-note {
@@ -242,9 +243,23 @@ input[type="text"]:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
+    user-select: none; /* Stops text selection highlighting copies */
 }
 
-/* Decorative CSS waves to replicate your template directly without an image */
+/* 🛡️ ANTI-SCREENSHOT/THEFT WATERMARK OVERLAY BLOCK */
+.watermark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Clicks bypass the div straight to components below */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'><text fill='rgba(220, 38, 38, 0.18)' font-family='Arial' font-weight='bold' font-size='11' transform='rotate(-45 60 80)' text-anchor='middle'>PREVIEW ONLY</text></svg>");
+    background-repeat: repeat;
+}
+
+/* Decorative CSS waves */
 .card-top-design {
     width: 100%;
     height: 180px;
@@ -279,7 +294,7 @@ input[type="text"]:focus {
     font-weight: 600;
 }
 
-/* PASSPORT CONTAINER & CIRCLE MASK */
+/* PASSPORT CONTAINER */
 .photo-container {
     position: relative;
     z-index: 3;
@@ -300,7 +315,6 @@ input[type="text"]:focus {
     height: 100%;
     object-fit: cover;
 }
-/* Placeholder silhouette if image is missing */
 .photo-placeholder {
     width: 100%;
     height: 100%;
@@ -323,12 +337,6 @@ input[type="text"]:focus {
     flex-direction: column;
     align-items: center;
 }
-.field-icon {
-    width: 18px;
-    height: 18px;
-    margin-bottom: 2px;
-    opacity: 0.8;
-}
 .field-val-name {
     font-size: 18px;
     font-weight: 800;
@@ -346,7 +354,7 @@ input[type="text"]:focus {
     letter-spacing: 0.5px;
 }
 
-/* CARD FOOTER BACKGROUND PANEL */
+/* CARD FOOTER */
 .card-footer {
     width: 100%;
     background: linear-gradient(to right, #061a33, #0f3360);
@@ -398,13 +406,18 @@ input[type="text"]:focus {
             <div class="form-icon">🪪</div>
             <div>
                 <h2>Student Registration</h2>
-                <p>Fill in your details to generate your ID card</p>
+                <p>Fill in details & verify options below</p>
             </div>
         </div>
 
         <div class="input-group">
             <label>Full Name</label>
             <input type="text" id="name" placeholder="Enter full name" autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <label>Email Address (For Payment Receipt)</label>
+            <input type="email" id="email" placeholder="student@school.edu" autocomplete="off">
         </div>
 
         <div class="input-group">
@@ -423,27 +436,29 @@ input[type="text"]:focus {
                 <icon>☁️</icon>
                 <p>Click to upload photo</p>
                 <span>or drag and drop</span>
-                <span>JPG, PNG (Max. 5MB)</span>
                 <input type="file" id="photo" accept="image/*">
             </div>
         </div>
 
-        <button class="submit-btn" onclick="submitForm()">
-            <span>💾</span> Submit & Generate ID Card
+        <button class="submit-btn" onclick="startVerificationSequence()">
+            <span>💳</span> Pay ₦2,500 & Submit Registration
         </button>
 
         <p id="msg"></p>
 
         <div class="secure-note">
             <span>🛡️</span>
-            <div><strong>Your information is safe with us.</strong><br>We do not share your data with anyone.</div>
+            <div><strong>Your information is safe with us.</strong><br>Transactions are processing securely via Paystack.</div>
         </div>
     </div>
 
     <div class="preview-container">
-        <div class="preview-title">👁️ ID Card Preview</div>
+        <div class="preview-title">👁️ Safe Interactive Verification Layout</div>
         
-        <div class="card">
+        <div class="card" oncontextmenu="return false;">
+            
+            <div class="watermark-overlay"></div>
+
             <div class="card-top-design"></div>
             
             <div class="card-header-content">
@@ -457,7 +472,7 @@ input[type="text"]:focus {
 
             <div class="photo-container">
                 <div id="placeholder" class="photo-placeholder"></div>
-                <img id="cardPhoto" style="display: none;">
+                <img id="cardPhoto" style="display: none; -webkit-user-drag: none;">
             </div>
 
             <div class="card-body">
@@ -491,25 +506,22 @@ input[type="text"]:focus {
 </div>
 
 <script>
-// 🔗 SUPABASE CONNECTION CONFIGURATION
+// 🔗 SUPABASE KEY PARAMETERS MAPPING
 const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// REAL-TIME INTERACTIVE INPUT BINDINGS
+// INPUT SYNC BINDINGS
 document.getElementById("name").oninput = e => {
     document.getElementById("cardName").innerText = e.target.value.toUpperCase() || "FULL NAME";
 };
-
 document.getElementById("student_id").oninput = e => {
     document.getElementById("cardMatric").innerText = e.target.value || "0000000000";
 };
-
 document.getElementById("phone").oninput = e => {
     document.getElementById("cardPhone").innerText = e.target.value || "08123456789";
 };
 
-// Frontend Preview Handle for instant file selection feedback
 document.getElementById("photo").onchange = e => {
     const file = e.target.files[0];
     if (file) {
@@ -525,33 +537,56 @@ document.getElementById("photo").onchange = e => {
     }
 };
 
-// ASYNC STORAGE AND DATA DB WRITE FOR SUBMITTING 
-async function submitForm() {
+// 💳 INITIAL GATEWAY TRIGGER ENGINE
+function startVerificationSequence() {
     const msg = document.getElementById("msg");
-    msg.style.color = "orange";
-    msg.innerText = "Processing system parameters...";
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const student_id = document.getElementById("student_id").value;
+    const file = document.getElementById("photo").files[0];
 
+    if (!name || !email || !student_id || !file) {
+        msg.style.color = "red";
+        msg.innerText = "Please complete all fields and attach your passport photo.";
+        return;
+    }
+
+    msg.style.color = "blue";
+    msg.innerText = "Launching secure payment window...";
+
+    // Initialize Paystack Inline Payment
+    let handler = PaystackPop.setup({
+        key: 'pk_test_your_paystack_key_here', // ⚠️ PASTE YOUR PUBLIC KEY HERE
+        email: email,
+        amount: 250000, // Amount in kobo (250000 kobo = ₦2,500)
+        currency: "NGN",
+        callback: function(response) {
+            // Payment was successful! Now execute database writes.
+            msg.style.color = "orange";
+            msg.innerText = "Payment verified! Saving account records...";
+            uploadAndSaveData(response.reference);
+        },
+        onClose: function() {
+            msg.style.color = "red";
+            msg.innerText = "Transaction canceled by user.";
+        }
+    });
+
+    handler.openIframe();
+}
+
+// 💾 BACKEND CORE DB EXECUTOR FUNCTIONS (Runs only after payment confirmation)
+async function uploadAndSaveData(paymentReference) {
+    const msg = document.getElementById("msg");
     const full_name = document.getElementById("name").value;
     const student_id = document.getElementById("student_id").value;
     const phone = document.getElementById("phone").value;
     const file = document.getElementById("photo").files[0];
 
-    if (!full_name || !student_id) {
-        msg.style.color = "red";
-        msg.innerText = "Please input primary identification parameters.";
-        return;
-    }
-
-    if (!file) {
-        msg.style.color = "red";
-        msg.innerText = "Please complete file target image uploading sequence.";
-        return;
-    }
-
     const fileName = Date.now() + "_" + file.name.replace(/\s+/g, '_');
 
     try {
-        // Storage upload execution bucket mapping targets
+        // Upload image to Supabase Storage
         const { error: uploadError } = await supabaseClient.storage
             .from("photos")
             .upload(fileName, file);
@@ -562,7 +597,7 @@ async function submitForm() {
             .from("photos")
             .getPublicUrl(fileName).data.publicUrl;
 
-        // DB Data parsing array objects parameters mapping targets
+        // Save data to Supabase Database table
         const { error: dbError } = await supabaseClient
             .from("registrations")
             .insert([{
@@ -570,17 +605,18 @@ async function submitForm() {
                 student_id,
                 phone,
                 photo_url,
-                organization: "CS_DEPARTMENT"
+                organization: "CS_DEPARTMENT",
+                payment_ref: paymentReference // Saves the transaction ID for admin audit tracking
             }]);
 
         if (dbError) throw dbError;
 
         msg.style.color = "green";
-        msg.innerText = "Registration securely completed successfully!";
+        msg.innerText = "Success! Payment confirmed and ID registration complete.";
     } catch (err) {
-        console.error(err);
+        console.error("Database upload trace logs:", err);
         msg.style.color = "red";
-        msg.innerText = "Process error encountered. Check connection logs.";
+        msg.innerText = "Database connection sync error. Please contact admin with payment reference: " + paymentReference;
     }
 }
 </script>
