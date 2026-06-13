@@ -455,7 +455,7 @@ function updateCardGraphics() {
     ctx.drawImage(loadedTemplate, 0, 0, canvas.width, canvas.height);
 
     if (loadedPassport) {
-        const destX = 186, destY = 200, destWidth = 312, destHeight = 372;
+        const destX = 187, destY = 195, destWidth = 310, destHeight = 380;
 
         ctx.save();
         ctx.beginPath();
@@ -483,12 +483,36 @@ function updateCardGraphics() {
 
     ctx.textAlign = "left";
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
 
-    ctx.fillText(currentFields.name.toUpperCase() || "ENTER NAME", 335, 680);
-    ctx.fillText(currentFields.matric.toUpperCase() || "0000000000", 425, 716);
-    ctx.fillText(currentFields.phone || "08123456789", 385, 752);
-    ctx.fillText(currentFields.level.toUpperCase() || "100 LEVEL", 280, 788);
+    // Labels stay fixed (pre-printed style), values are drawn to the right
+    // of each label with enough room and a smaller font so long entries
+    // don't collide with the next line.
+    const labelFont = "28px 'Segoe UI', Arial, sans-serif";
+    const valueFont = "bold 19px 'Segoe UI', Arial, sans-serif";
+    const valueX = 330; // single shared start column for all values
+    const maxValueWidth = 320; // shrink font if value would overflow the card
+
+    const fields = [
+        { label: "Full Name:",          value: currentFields.name.toUpperCase()   || "ENTER NAME",   y: 715 },
+        { label: "Matric/Form Number:",  value: currentFields.matric.toUpperCase() || "0000000000",  y: 760 },
+        { label: "Phone Number:",        value: currentFields.phone                || "08123456789", y: 805 },
+        { label: "Level:",               value: currentFields.level.toUpperCase()  || "100 LEVEL",   y: 850 }
+    ];
+
+    fields.forEach(f => {
+        // draw label
+        ctx.font = labelFont;
+        ctx.fillText(f.label, 90, f.y);
+
+        // draw value, shrinking font if it's too wide for the remaining space
+        let size = 19;
+        ctx.font = `bold ${size}px 'Segoe UI', Arial, sans-serif`;
+        while (ctx.measureText(f.value).width > maxValueWidth && size > 12) {
+            size -= 1;
+            ctx.font = `bold ${size}px 'Segoe UI', Arial, sans-serif`;
+        }
+        ctx.fillText(f.value, valueX, f.y);
+    });
 
     ctx.save();
     ctx.font = "bold 24px Arial";
