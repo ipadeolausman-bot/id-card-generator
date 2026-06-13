@@ -8,190 +8,348 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
 :root {
-    --bg-gradient: linear-gradient(135deg, #f4f7fe, #e9f0ff);
-    --primary-green: #006837;
-    --accent-dark: #1e293b;
-    --border-color: #cbd5e1;
-    --text-muted: #64748b;
+    --primary: #046039;
+    --primary-dark: #03402a;
+    --primary-light: #e6f4ec;
+    --accent: #d4af37;
+    --ink: #14202b;
+    --muted: #64748b;
+    --border: #e1e7ef;
+    --danger: #dc2626;
+    --warn: #b45309;
+    --success: #15803d;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --shadow-soft: 0 10px 30px rgba(15, 40, 30, 0.07);
+    --shadow-card: 0 20px 50px rgba(15, 40, 30, 0.16);
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background: var(--bg-gradient);
+    font-family: 'Inter', system-ui, sans-serif;
+    background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(4, 96, 57, 0.08), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(212, 175, 55, 0.10), transparent 55%),
+        #f6f8fa;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
+    color: var(--ink);
+    padding: 24px 16px 40px;
 }
 
+/* HEADER */
 .header-portal {
     text-align: center;
-    margin-bottom: 25px;
-    margin-top: 10px;
+    margin-bottom: 32px;
+    max-width: 640px;
+}
+.header-portal .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(4, 96, 57, 0.15);
 }
 .header-portal h1 {
-    color: var(--primary-green);
-    font-size: 26px;
-    text-transform: uppercase;
+    font-family: 'Manrope', sans-serif;
+    color: var(--primary-dark);
+    font-size: clamp(24px, 4vw, 32px);
     font-weight: 800;
+    letter-spacing: -0.5px;
 }
 .header-portal p {
-    color: #16a34a;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 8px;
+    line-height: 1.5;
 }
 
+/* LAYOUT */
 .wrapper {
     display: flex;
-    gap: 30px;
-    max-width: 1100px;
+    gap: 28px;
+    max-width: 1080px;
     width: 100%;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
-/* LEFT SIDE FORM PANEL */
+/* FORM PANEL */
 .form-box {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: var(--radius-lg);
     width: 100%;
-    max-width: 420px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    max-width: 440px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border);
 }
 
 .form-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
 }
 .form-icon {
-    background: #f0fdf4;
-    color: var(--primary-green);
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    font-size: 20px;
+    flex-shrink: 0;
 }
-.form-header h2 { font-size: 18px; color: var(--accent-dark); }
-.form-header p { font-size: 12px; color: var(--text-muted); }
+.form-header h2 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink);
+}
+.form-header p {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 2px;
+}
 
-.input-group { margin-bottom: 14px; }
+.input-group { margin-bottom: 16px; }
 .input-group label {
     display: block;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--ink);
     margin-bottom: 6px;
+    letter-spacing: 0.2px;
 }
+.input-group label .req { color: var(--danger); margin-left: 2px; }
+
 input[type="text"], input[type="email"] {
     width: 100%;
-    padding: 11px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    font-size: 14px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--border);
+    font-size: 14.5px;
+    font-family: inherit;
     outline: none;
+    background: #fbfcfd;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 input[type="text"]:focus, input[type="email"]:focus {
-    border-color: var(--primary-green);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(4, 96, 57, 0.08);
+    background: #ffffff;
 }
+input::placeholder { color: #a3aebb; }
 
+/* UPLOAD ZONE */
 .upload-zone {
-    border: 2px dashed var(--border-color);
-    border-radius: 12px;
-    padding: 20px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px 16px;
     text-align: center;
     cursor: pointer;
-    background: #fafafa;
+    background: #fbfcfd;
     position: relative;
+    transition: border-color 0.15s ease, background 0.15s ease;
 }
-.upload-zone p { font-size: 13px; font-weight: 600; }
-.upload-zone span { font-size: 11px; color: var(--text-muted); display: block; }
-#photo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.upload-zone:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+.upload-zone .icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+    display: block;
+}
+.upload-zone p {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+}
+.upload-zone span {
+    font-size: 11.5px;
+    color: var(--muted);
+    display: block;
+    margin-top: 4px;
+}
+.upload-zone.has-file {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+.upload-zone.has-file p { color: var(--primary-dark); }
+#photo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
+/* SUBMIT BUTTON */
 .submit-btn {
     width: 100%;
-    background: var(--primary-green);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
     border: none;
-    padding: 14px;
-    border-radius: 8px;
+    padding: 15px;
+    border-radius: var(--radius-md);
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 700;
+    font-family: inherit;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 18px;
+    letter-spacing: 0.2px;
+    box-shadow: 0 8px 18px rgba(4, 96, 57, 0.25);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
-.submit-btn:hover { background: #004d28; }
-#msg { text-align: center; margin-top: 12px; font-size: 13px; font-weight: 700; }
+.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(4, 96, 57, 0.3); }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn .price {
+    background: rgba(255,255,255,0.18);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+}
 
-/* RIGHT SIDE PREVIEW PANEL */
+#msg {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 10px;
+    display: none;
+}
+#msg.show { display: block; }
+#msg.info    { background: #eef6ff; color: #1d4ed8; }
+#msg.success { background: #ecfdf3; color: var(--success); }
+#msg.error   { background: #fef2f2; color: var(--danger); }
+#msg.warn    { background: #fffbeb; color: var(--warn); }
+
+.security-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* PREVIEW PANEL */
 .preview-container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 450px; /* Limits preview box cleanly on mobile screens */
+    max-width: 460px;
 }
 .preview-title {
-    background: var(--accent-dark);
+    background: linear-gradient(135deg, var(--ink), #1e3a32);
     color: white;
-    padding: 12px 20px;
+    padding: 14px 20px;
     font-size: 13px;
-    font-weight: 600;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    font-weight: 700;
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.preview-title .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); }
+    70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
 }
 
-/* ANTI-STRETCH RESPONSIVE LAYOUT MATRIX */
 .canvas-holder {
     width: 100%;
     background: #ffffff;
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
     line-height: 0;
+    border: 1px solid var(--border);
+    border-top: none;
 }
 canvas {
-    width: 100% !important;   /* Makes the container perfectly fluid on mobile responsive widths */
-    height: auto !important;  /* Controls height scaling automatically without squishing */
+    width: 100% !important;
+    height: auto !important;
     user-select: none;
+    display: block;
 }
 
+.preview-hint {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* FOOTER */
 .system-footer {
     width: 100%;
-    max-width: 880px;
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
+    max-width: 1080px;
+    background: #ffffff;
+    padding: 16px;
+    border-radius: var(--radius-md);
     text-align: center;
     font-size: 12px;
-    color: var(--text-muted);
-    border: 1px solid #e2e8f0;
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+@media (max-width: 540px) {
+    .form-box, .preview-container { max-width: 100%; }
 }
 </style>
 </head>
 <body>
 
 <div class="header-portal">
+    <span class="badge">🛡️ Secure Registration Portal</span>
     <h1>Official Zazzau Membership</h1>
-    <p>Identity Management Terminal</p>
+    <p>Complete the form below to generate your verified membership ID card. All submissions are encrypted and securely processed.</p>
 </div>
 
 <div class="wrapper">
@@ -201,72 +359,80 @@ canvas {
             <div class="form-icon">🪪</div>
             <div>
                 <h2>Member Registration</h2>
-                <p>Provide validation criteria parameters below</p>
+                <p>All fields marked with * are required</p>
             </div>
         </div>
 
         <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" id="name" placeholder="Enter full name" autocomplete="off">
+            <label>Full Name<span class="req">*</span></label>
+            <input type="text" id="name" placeholder="e.g. John Adamu Bello" autocomplete="off">
         </div>
 
         <div class="input-group">
-            <label>Email Address</label>
+            <label>Email Address<span class="req">*</span></label>
             <input type="email" id="email" placeholder="member@domain.com" autocomplete="off">
         </div>
 
         <div class="input-group">
-            <label>Matric / Form Number</label>
-            <input type="text" id="student_id" placeholder="Enter matric or form number" autocomplete="off">
+            <label>Matric / Form Number<span class="req">*</span></label>
+            <input type="text" id="student_id" placeholder="e.g. ZAZ/2026/00123" autocomplete="off">
         </div>
 
         <div class="input-group">
             <label>Phone Number</label>
-            <input type="text" id="phone" placeholder="Enter phone number" autocomplete="off">
+            <input type="text" id="phone" placeholder="e.g. 08123456789" autocomplete="off">
         </div>
 
         <div class="input-group">
-            <label>Level / Tier Designation</label>
+            <label>Level / Tier Designation<span class="req">*</span></label>
             <input type="text" id="level" placeholder="e.g. 100 Level, Executive" autocomplete="off">
         </div>
 
         <div class="input-group">
-            <label>Passport Photograph Allocation</label>
-            <div class="upload-zone">
-                <p>📷 Tap to select passport photo</p>
-                <span>Supports JPG, PNG formats up to 5MB max</span>
+            <label>Passport Photograph<span class="req">*</span></label>
+            <div class="upload-zone" id="uploadZone">
+                <span class="icon">📷</span>
+                <p id="uploadLabel">Tap to select passport photo</p>
+                <span>JPG or PNG, max 5MB — square photo recommended</span>
                 <input type="file" id="photo" accept="image/*">
             </div>
         </div>
 
         <button class="submit-btn" onclick="initializePaymentSequence()">
-            Secure Verification Checkout (₦2,500)
+            Secure Verification Checkout <span class="price">₦2,500</span>
         </button>
 
         <p id="msg"></p>
+
+        <div class="security-note">
+            🔒 Your details and photo are transmitted over an encrypted connection and stored securely. Payments are processed via Paystack — card details never touch our servers.
+        </div>
     </div>
 
     <div class="preview-container">
-        <div class="preview-title">🛡️ Anti-Theft Verification Grid Engine View</div>
+        <div class="preview-title">
+            <span>🛡️ Live ID Preview</span>
+            <span class="live-dot"></span>
+        </div>
         <div class="canvas-holder">
             <canvas id="idCanvas" width="684" height="935" oncontextmenu="return false;"></canvas>
         </div>
+        <p class="preview-hint">This preview updates as you type. The watermark is removed automatically after successful payment.</p>
     </div>
 
 </div>
 
 <div class="system-footer">
-    🛡️ Secure Authentication Protocol | © C.IPADEOLA 2026 | All System Infrastructure Rights Reserved
+    🛡️ Secure Authentication Protocol &nbsp;•&nbsp; © C.IPADEOLA 2026 &nbsp;•&nbsp; All System Infrastructure Rights Reserved
 </div>
 
 <script>
 // INFRASTRUCTURE STRUCTURAL ROUTING PARAMS
 const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE"; 
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// ⚠️ PLACE YOUR SUPABASE LINK HERE
-const TEMPLATE_SRC = "https://xnnhillkyhjxtuulvejd.supabase.co/storage/v1/object/public/Image/1781306779094.png";
+const TEMPLATE_SRC = "https://xnnhillkyhjxtuulvejd.supabase.co/storage/v1/object/public/photos/1000178879.png";
 
 const canvas = document.getElementById("idCanvas");
 const ctx = canvas.getContext("2d");
@@ -282,28 +448,19 @@ function initCanvas() {
     loadedTemplate.onload = () => { updateCardGraphics(); };
 }
 
-// THE PRIMARY RENDERING GRID - RE-ALIGNED MANUALLY FOR PIXEL ACCURACY
 function updateCardGraphics() {
     if (!loadedTemplate) return;
 
-    // Clear previous view frames
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // 1. Draw Template Base Image Layout Layer
     ctx.drawImage(loadedTemplate, 0, 0, canvas.width, canvas.height);
 
-    // 2. Center Crop Passport (Object-Fit: Cover Simulation inside Canvas Coordinates)
     if (loadedPassport) {
-        // Pixel alignment mapped perfectly inside your card's white square container
-        const destX = 186;
-        const destY = 200;
-        const destWidth = 312;
-        const destHeight = 372;
+        const destX = 186, destY = 200, destWidth = 312, destHeight = 372;
 
         ctx.save();
         ctx.beginPath();
         ctx.rect(destX, destY, destWidth, destHeight);
-        ctx.clip(); // Mask boundaries locking layer safely inside inner box limits
+        ctx.clip();
 
         const imgWidth = loadedPassport.width;
         const imgHeight = loadedPassport.height;
@@ -324,24 +481,21 @@ function updateCardGraphics() {
         ctx.restore();
     }
 
-    // 3. Print Student Details (Nudged perfectly into position next to pre-printed labels)
     ctx.textAlign = "left";
-    ctx.fillStyle = "#FFFFFF"; // Premium high contrast white configuration
+    ctx.fillStyle = "#FFFFFF";
     ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
 
-    // Text mapping coordinates calculation
     ctx.fillText(currentFields.name.toUpperCase() || "ENTER NAME", 335, 680);
     ctx.fillText(currentFields.matric.toUpperCase() || "0000000000", 425, 716);
     ctx.fillText(currentFields.phone || "08123456789", 385, 752);
     ctx.fillText(currentFields.level.toUpperCase() || "100 LEVEL", 280, 788);
 
-    // 4. PREVIEW SECURITY WATERMARK GRID OVERLAY LAYERS
     ctx.save();
     ctx.font = "bold 24px Arial";
     ctx.fillStyle = "rgba(220, 38, 38, 0.20)";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    
+
     for (let x = -100; x < canvas.width + 200; x += 180) {
         for (let y = -100; y < canvas.height + 200; y += 140) {
             ctx.save();
@@ -354,7 +508,6 @@ function updateCardGraphics() {
     ctx.restore();
 }
 
-// REALTIME TERMINAL USER INTERACTIVE STACK EVENT TRIGGERS
 document.getElementById("name").oninput = e => { currentFields.name = e.target.value; updateCardGraphics(); };
 document.getElementById("student_id").oninput = e => { currentFields.matric = e.target.value; updateCardGraphics(); };
 document.getElementById("phone").oninput = e => { currentFields.phone = e.target.value; updateCardGraphics(); };
@@ -362,9 +515,12 @@ document.getElementById("level").oninput = e => { currentFields.level = e.target
 
 document.getElementById("photo").onchange = e => {
     const file = e.target.files[0];
+    const zone = document.getElementById("uploadZone");
+    const label = document.getElementById("uploadLabel");
+
     if (file) {
         if (file.size > 5242880) {
-            alert("File payload bounds too large! Maximum limit caps strictly at 5MB.");
+            showMsg("File too large. Maximum allowed size is 5MB.", "error");
             e.target.value = "";
             return;
         }
@@ -375,14 +531,21 @@ document.getElementById("photo").onchange = e => {
             loadedPassport.onload = () => { updateCardGraphics(); };
         };
         reader.readAsDataURL(file);
+
+        zone.classList.add("has-file");
+        label.textContent = "✓ " + file.name;
     }
 };
 
 window.onload = initCanvas;
 
-// TRANSACTION SEQUENCE GATEWAY INFRASTRUCTURE
-function initializePaymentSequence() {
+function showMsg(text, type) {
     const msg = document.getElementById("msg");
+    msg.className = "show " + type;
+    msg.innerText = text;
+}
+
+function initializePaymentSequence() {
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const student_id = document.getElementById("student_id").value;
@@ -390,34 +553,29 @@ function initializePaymentSequence() {
     const file = document.getElementById("photo").files[0];
 
     if (!name || !email || !student_id || !level || !file) {
-        msg.style.color = "red";
-        msg.innerText = "Error: Please complete all input field matrices and pick a passport photo.";
+        showMsg("Please complete all required fields and select a passport photo.", "error");
         return;
     }
 
-    msg.style.color = "#006837";
-    msg.innerText = "Contacting Paystack payment endpoints pipeline server logs...";
+    showMsg("Connecting to secure payment gateway...", "info");
 
     let handler = PaystackPop.setup({
         key: 'pk_test_your_paystack_key_here',
         email: email,
-        amount: 250000, 
+        amount: 250000,
         currency: "NGN",
         callback: function(response) {
-            msg.style.color = "orange";
-            msg.innerText = "Payment authenticated clearing safely! Initializing cloud storage insertion routines...";
+            showMsg("Payment confirmed! Finalizing your registration...", "warn");
             uploadAndCommitRegistration(response.reference);
         },
         onClose: function() {
-            msg.style.color = "red";
-            msg.innerText = "Checkout sequence dropped manually by target terminal operator.";
+            showMsg("Checkout was closed before payment completed.", "error");
         }
     });
     handler.openIframe();
 }
 
 async function uploadAndCommitRegistration(paymentReference) {
-    const msg = document.getElementById("msg");
     const full_name = document.getElementById("name").value;
     const student_id = document.getElementById("student_id").value;
     const phone = document.getElementById("phone").value;
@@ -451,12 +609,10 @@ async function uploadAndCommitRegistration(paymentReference) {
 
         if (dbError) throw dbError;
 
-        msg.style.color = "green";
-        msg.innerText = "Success! Transaction cleared and account database entries committed successfully.";
+        showMsg("Success! Your registration has been completed and recorded.", "success");
     } catch (err) {
         console.error("System structural crash reports:", err);
-        msg.style.color = "red";
-        msg.innerText = "Write sync interrupt error. Reference ID: " + paymentReference;
+        showMsg("We received your payment but could not save your details. Reference: " + paymentReference + ". Please contact support.", "error");
     }
 }
 </script>
