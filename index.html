@@ -13,9 +13,8 @@
     --bg-gradient: linear-gradient(135deg, #f4f7fe, #e9f0ff);
     --primary-green: #006837;
     --accent-dark: #1e293b;
-    --button-blue: #0a4da2;
-    --text-muted: #64748b;
     --border-color: #cbd5e1;
+    --text-muted: #64748b;
 }
 
 * {
@@ -31,49 +30,46 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
 }
 
-/* TOP HEADER SYSTEM PORTAL */
 .header-portal {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     margin-top: 10px;
 }
 .header-portal h1 {
     color: var(--primary-green);
-    font-size: 28px;
-    letter-spacing: 1px;
+    font-size: 26px;
     text-transform: uppercase;
     font-weight: 800;
 }
 .header-portal p {
     color: #16a34a;
-    font-size: 14px;
-    letter-spacing: 2px;
+    font-size: 13px;
     text-transform: uppercase;
-    margin-top: 2px;
+    letter-spacing: 1px;
     font-weight: 600;
 }
 
-/* DUAL PANEL WORKSPACE WRAPPER */
 .wrapper {
     display: flex;
-    gap: 40px;
-    max-width: 1050px;
+    gap: 30px;
+    max-width: 1100px;
     width: 100%;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
-/* LEFT WORKSPACE PANEL: SECURE REGISTRATION FORM */
+/* LEFT SIDE FORM PANEL */
 .form-box {
     background: white;
-    padding: 30px;
+    padding: 25px;
     border-radius: 16px;
-    width: 420px;
+    width: 100%;
+    max-width: 420px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
@@ -81,9 +77,8 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
-
 .form-icon {
     background: #f0fdf4;
     color: var(--primary-green);
@@ -95,20 +90,10 @@ body {
     justify-content: center;
     font-weight: bold;
 }
+.form-header h2 { font-size: 18px; color: var(--accent-dark); }
+.form-header p { font-size: 12px; color: var(--text-muted); }
 
-.form-header h2 {
-    font-size: 18px;
-    color: var(--accent-dark);
-}
-.form-header p {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.input-group {
-    margin-bottom: 16px;
-}
-
+.input-group { margin-bottom: 14px; }
 .input-group label {
     display: block;
     font-size: 13px;
@@ -116,56 +101,31 @@ body {
     color: #1e293b;
     margin-bottom: 6px;
 }
-
 input[type="text"], input[type="email"] {
     width: 100%;
-    padding: 12px 16px;
+    padding: 11px 14px;
     border-radius: 8px;
     border: 1px solid var(--border-color);
     font-size: 14px;
     outline: none;
-    transition: 0.2s;
 }
-
 input[type="text"]:focus, input[type="email"]:focus {
     border-color: var(--primary-green);
-    box-shadow: 0 0 0 3px rgba(0, 104, 55, 0.15);
 }
 
-/* GRAPHIC DRAG & DROP UPLOAD SLOT MODULE */
 .upload-zone {
     border: 2px dashed var(--border-color);
     border-radius: 12px;
-    padding: 22px;
+    padding: 20px;
     text-align: center;
     cursor: pointer;
     background: #fafafa;
-    transition: 0.2s;
     position: relative;
 }
-.upload-zone:hover {
-    border-color: var(--primary-green);
-    background: #f0fdf4;
-}
-.upload-zone p {
-    font-size: 13px;
-    color: #1e293b;
-    font-weight: 600;
-}
-.upload-zone span {
-    font-size: 11px;
-    color: var(--text-muted);
-    display: block;
-    margin-top: 4px;
-}
-#photo {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
+.upload-zone p { font-size: 13px; font-weight: 600; }
+.upload-zone span { font-size: 11px; color: var(--text-muted); display: block; }
+#photo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-/* TRANSACTION CHECKOUT TRIGGER BUTTON */
 .submit-btn {
     width: 100%;
     background: var(--primary-green);
@@ -177,40 +137,16 @@ input[type="text"]:focus, input[type="email"]:focus {
     font-weight: bold;
     cursor: pointer;
     margin-top: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: 0.2s;
 }
-.submit-btn:hover {
-    background: #004d28;
-}
+.submit-btn:hover { background: #004d28; }
+#msg { text-align: center; margin-top: 12px; font-size: 13px; font-weight: 700; }
 
-.secure-note {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f8fafc;
-    border: 1px solid #f1f5f9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 20px;
-    font-size: 11px;
-    color: var(--accent-dark);
-}
-
-#msg {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-/* RIGHT WORKSPACE PANEL: LIVE PROTECTED CANVAS DISPLAY CONTAINER */
+/* RIGHT SIDE PREVIEW PANEL */
 .preview-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 450px; /* Limits preview box cleanly on mobile screens */
 }
 .preview-title {
     background: var(--accent-dark);
@@ -220,23 +156,24 @@ input[type="text"]:focus, input[type="email"]:focus {
     font-weight: 600;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
-/* HTML5 Security Protected Output View Canvas */
-canvas {
+/* ANTI-STRETCH RESPONSIVE LAYOUT MATRIX */
+.canvas-holder {
+    width: 100%;
+    background: #ffffff;
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    background-color: #ffffff;
-    max-width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+canvas {
+    width: 100% !important;   /* Makes the container perfectly fluid on mobile responsive widths */
+    height: auto !important;  /* Controls height scaling automatically without squishing */
     user-select: none;
-    -webkit-user-drag: none;
 }
 
-/* EXTERNAL ROOT SYSTEM BASELINE FOOTER */
 .system-footer {
     width: 100%;
     max-width: 880px;
@@ -264,7 +201,7 @@ canvas {
             <div class="form-icon">🪪</div>
             <div>
                 <h2>Member Registration</h2>
-                <p>Provide exact parameter details to overlay verification layers</p>
+                <p>Provide validation criteria parameters below</p>
             </div>
         </div>
 
@@ -274,7 +211,7 @@ canvas {
         </div>
 
         <div class="input-group">
-            <label>Email Address (For Secure Receipt)</label>
+            <label>Email Address</label>
             <input type="email" id="email" placeholder="member@domain.com" autocomplete="off">
         </div>
 
@@ -290,7 +227,7 @@ canvas {
 
         <div class="input-group">
             <label>Level / Tier Designation</label>
-            <input type="text" id="level" placeholder="e.g. 100 Level, Executive, Alumnus" autocomplete="off">
+            <input type="text" id="level" placeholder="e.g. 100 Level, Executive" autocomplete="off">
         </div>
 
         <div class="input-group">
@@ -307,16 +244,13 @@ canvas {
         </button>
 
         <p id="msg"></p>
-
-        <div class="secure-note">
-            <span>🛡️</span>
-            <div><strong>Encryption Protocol Active.</strong><br>Data writes lock down immediately post payment clearing authentication checks via Paystack.</div>
-        </div>
     </div>
 
     <div class="preview-container">
         <div class="preview-title">🛡️ Anti-Theft Verification Grid Engine View</div>
-        <canvas id="idCanvas" width="600" height="820" oncontextmenu="return false;"></canvas>
+        <div class="canvas-holder">
+            <canvas id="idCanvas" width="684" height="935" oncontextmenu="return false;"></canvas>
+        </div>
     </div>
 
 </div>
@@ -326,59 +260,51 @@ canvas {
 </div>
 
 <script>
-// 🔗 SUPABASE INFRASTRUCTURE PARSING PARAMS
+// INFRASTRUCTURE STRUCTURAL ROUTING PARAMS
 const supabaseUrl = "https://xnnhillkyhjxtuulvejd.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhubmhpbGxreWhqeHR1dWx2ZWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDQxMzgsImV4cCI6MjA5Njc4MDEzOH0.j2xsuzJjRKstEkdNNzgrugIcp3Ey6PNxwO5Il7n8FaE"; 
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// ⚠️ PASTE YOUR PUBLIC SUPABASE TEMPLATE PNG LINK DIRECTLY HERE
-const TEMPLATE_SRC = "https://xnnhillkyhjxtuulvejd.supabase.co/storage/v1/object/public/Image/1781306779094.png";
+// ⚠️ PLACE YOUR SUPABASE LINK HERE
+const TEMPLATE_SRC = "https://xnnhillkyhjxtuulvejd.supabase.co/storage/v1/object/public/photos/1000178879.png";
 
 const canvas = document.getElementById("idCanvas");
 const ctx = canvas.getContext("2d");
 
-// System state controllers tracking local updates securely
-let currentFields = {
-    name: "",
-    matric: "",
-    phone: "",
-    level: ""
-};
+let currentFields = { name: "", matric: "", phone: "", level: "" };
 let loadedTemplate = null;
 let loadedPassport = null;
 
-// Preload card asset canvas configurations
 function initCanvas() {
     loadedTemplate = new Image();
-    loadedTemplate.crossOrigin = "anonymous"; // Essential parameter component preventing CORS export security errors
+    loadedTemplate.crossOrigin = "anonymous";
     loadedTemplate.src = TEMPLATE_SRC;
-    loadedTemplate.onload = () => {
-        updateCardGraphics();
-    };
+    loadedTemplate.onload = () => { updateCardGraphics(); };
 }
 
-// GRAPHICS ENGINE MATRIX - MANAGES DATA LAYER MAPPING
+// THE PRIMARY RENDERING GRID - RE-ALIGNED MANUALLY FOR PIXEL ACCURACY
 function updateCardGraphics() {
     if (!loadedTemplate) return;
 
-    // 1. Render Root Template Base Graphic Layer
+    // Clear previous view frames
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // 1. Draw Template Base Image Layout Layer
     ctx.drawImage(loadedTemplate, 0, 0, canvas.width, canvas.height);
 
-    // 2. Draw Passport Photo with Aspect Ratio Protection (Smart Center-Cropping)
+    // 2. Center Crop Passport (Object-Fit: Cover Simulation inside Canvas Coordinates)
     if (loadedPassport) {
-        // Destination constraints matching the template's white square perfectly
-        const destX = 166;
-        const destY = 175;
-        const destWidth = 268;
-        const destHeight = 330;
+        // Pixel alignment mapped perfectly inside your card's white square container
+        const destX = 186;
+        const destY = 200;
+        const destWidth = 312;
+        const destHeight = 372;
 
         ctx.save();
         ctx.beginPath();
         ctx.rect(destX, destY, destWidth, destHeight);
-        ctx.clip(); // Locks drawings inside the boundaries
+        ctx.clip(); // Mask boundaries locking layer safely inside inner box limits
 
-        // Calculate aspect ratios to emulate 'object-fit: cover' behavior
         const imgWidth = loadedPassport.width;
         const imgHeight = loadedPassport.height;
         const imgRatio = imgWidth / imgHeight;
@@ -387,53 +313,40 @@ function updateCardGraphics() {
         let srcX = 0, srcY = 0, srcWidth = imgWidth, srcHeight = imgHeight;
 
         if (imgRatio > destRatio) {
-            // Image is wider than the container -> Crop left/right edges
             srcWidth = imgHeight * destRatio;
             srcX = (imgWidth - srcWidth) / 2;
         } else {
-            // Image is taller than the container -> Crop top/bottom edges
             srcHeight = imgWidth / destRatio;
             srcY = (imgHeight - srcHeight) / 2;
         }
 
-        // Draw the smartly cropped image slice directly into the card frame area
         ctx.drawImage(loadedPassport, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight);
         ctx.restore();
     }
 
-    // 3. Render Student Text Metadata Layers (Separated coordinates for pixel perfection)
+    // 3. Print Student Details (Nudged perfectly into position next to pre-printed labels)
     ctx.textAlign = "left";
-    ctx.fillStyle = "#FFFFFF"; // Solid crisp white contrast typography
+    ctx.fillStyle = "#FFFFFF"; // Premium high contrast white configuration
+    ctx.font = "bold 21px 'Segoe UI', Arial, sans-serif";
 
-    // Name Alignment: Push it to start immediately after the preprinted "Full Name:" label
-    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-    ctx.fillText(currentFields.name.toUpperCase() || "ENTER NAME", 295, 595);
+    // Text mapping coordinates calculation
+    ctx.fillText(currentFields.name.toUpperCase() || "ENTER NAME", 335, 680);
+    ctx.fillText(currentFields.matric.toUpperCase() || "0000000000", 425, 716);
+    ctx.fillText(currentFields.phone || "08123456789", 385, 752);
+    ctx.fillText(currentFields.level.toUpperCase() || "100 LEVEL", 280, 788);
 
-    // Matric Alignment: Moves next to "Matric/Form Number:" label
-    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-    ctx.fillText(currentFields.matric.toUpperCase() || "0000000000", 370, 627);
-
-    // Phone Alignment: Moves next to "Phone Number:" label
-    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-    ctx.fillText(currentFields.phone || "08123456789", 335, 659);
-
-    // Level Alignment: Moves next to "Level:" label
-    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
-    ctx.fillText(currentFields.level.toUpperCase() || "100 LEVEL", 245, 691);
-
-    // 4. RUN ANTI-THEFT WATERMARK ENGINE OVER CANVAS FRAME
+    // 4. PREVIEW SECURITY WATERMARK GRID OVERLAY LAYERS
     ctx.save();
-    ctx.font = "bold 22px Arial";
-    ctx.fillStyle = "rgba(220, 38, 38, 0.22)"; // Highly descriptive semi-transparent alarm crimson tone matrix
+    ctx.font = "bold 24px Arial";
+    ctx.fillStyle = "rgba(220, 38, 38, 0.20)";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     
-    // Grid alignment parameters array processing
     for (let x = -100; x < canvas.width + 200; x += 180) {
         for (let y = -100; y < canvas.height + 200; y += 140) {
             ctx.save();
             ctx.translate(x, y);
-            ctx.rotate(-Math.PI / 6); // Oblique layout formatting rotation configuration
+            ctx.rotate(-Math.PI / 6);
             ctx.fillText("UNPAID PREVIEW", 0, 0);
             ctx.restore();
         }
@@ -441,7 +354,7 @@ function updateCardGraphics() {
     ctx.restore();
 }
 
-// REALTIME DYNAMIC EVENT INPUT INTERACTIVE TRACKERS
+// REALTIME TERMINAL USER INTERACTIVE STACK EVENT TRIGGERS
 document.getElementById("name").oninput = e => { currentFields.name = e.target.value; updateCardGraphics(); };
 document.getElementById("student_id").oninput = e => { currentFields.matric = e.target.value; updateCardGraphics(); };
 document.getElementById("phone").oninput = e => { currentFields.phone = e.target.value; updateCardGraphics(); };
@@ -450,9 +363,8 @@ document.getElementById("level").oninput = e => { currentFields.level = e.target
 document.getElementById("photo").onchange = e => {
     const file = e.target.files[0];
     if (file) {
-        // Enforce maximum size guard limit immediately natively inside client framework logic parameter stacks
         if (file.size > 5242880) {
-            alert("File target bounds too large! Max file payload structural limitations restricted to 5MB.");
+            alert("File payload bounds too large! Maximum limit caps strictly at 5MB.");
             e.target.value = "";
             return;
         }
@@ -468,7 +380,7 @@ document.getElementById("photo").onchange = e => {
 
 window.onload = initCanvas;
 
-// 💳 PAYSTACK GATEWAY INTEGRATION ENGINE PROCESSING
+// TRANSACTION SEQUENCE GATEWAY INFRASTRUCTURE
 function initializePaymentSequence() {
     const msg = document.getElementById("msg");
     const name = document.getElementById("name").value;
@@ -479,32 +391,31 @@ function initializePaymentSequence() {
 
     if (!name || !email || !student_id || !level || !file) {
         msg.style.color = "red";
-        msg.innerText = "Error: Complete structural fields parameter inputs and load profile image targets.";
+        msg.innerText = "Error: Please complete all input field matrices and pick a passport photo.";
         return;
     }
 
     msg.style.color = "#006837";
-    msg.innerText = "Contacting Paystack pipeline channels secure servers...";
+    msg.innerText = "Contacting Paystack payment endpoints pipeline server logs...";
 
     let handler = PaystackPop.setup({
-        key: 'pk_test_your_paystack_key_here', // ⚠️ PASTE YOUR PUBLIC LIVE/TEST KEY HERE
+        key: 'pk_test_your_paystack_key_here',
         email: email,
-        amount: 250000, // ₦2,500 calculated via absolute base token parameter fields values (250000 Kobo)
+        amount: 250000, 
         currency: "NGN",
         callback: function(response) {
             msg.style.color = "orange";
-            msg.innerText = "Payment cleared authenticated successfully! Compiling Supabase Storage routing packets...";
+            msg.innerText = "Payment authenticated clearing safely! Initializing cloud storage insertion routines...";
             uploadAndCommitRegistration(response.reference);
         },
         onClose: function() {
             msg.style.color = "red";
-            msg.innerText = "Checkout pipeline aborted securely by system user parameters control loops.";
+            msg.innerText = "Checkout sequence dropped manually by target terminal operator.";
         }
     });
     handler.openIframe();
 }
 
-// 💾 SECURE STORAGE AND ROW DATABASE INSERTION DRIVER EXECUTION POST PAYMENT
 async function uploadAndCommitRegistration(paymentReference) {
     const msg = document.getElementById("msg");
     const full_name = document.getElementById("name").value;
@@ -516,7 +427,6 @@ async function uploadAndCommitRegistration(paymentReference) {
     const fileName = Date.now() + "_" + file.name.replace(/\s+/g, '_');
 
     try {
-        // 1. Submit passport image object to the newly locked-down public bucket folder structures
         const { error: uploadError } = await supabaseClient.storage
             .from("photos")
             .upload(fileName, file);
@@ -527,14 +437,13 @@ async function uploadAndCommitRegistration(paymentReference) {
             .from("photos")
             .getPublicUrl(fileName).data.publicUrl;
 
-        // 2. Insert validated student row objects array structure parameters targeting database
         const { error: dbError } = await supabaseClient
             .from("registrations")
             .insert([{
                 full_name,
                 student_id,
                 phone,
-                level, 
+                level,
                 photo_url,
                 organization: "OFFICIAL_ZAZZAU",
                 payment_ref: paymentReference
@@ -547,7 +456,7 @@ async function uploadAndCommitRegistration(paymentReference) {
     } catch (err) {
         console.error("System structural crash reports:", err);
         msg.style.color = "red";
-        msg.innerText = "Write sync interrupt error. Contact tech support with your pay reference ID: " + paymentReference;
+        msg.innerText = "Write sync interrupt error. Reference ID: " + paymentReference;
     }
 }
 </script>
