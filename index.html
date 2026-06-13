@@ -365,36 +365,63 @@ function updateCardGraphics() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(loadedTemplate, 0, 0, canvas.width, canvas.height);
 
-    // 2. Render Passport Photo directly into the template white container frame box
+    // 2. Draw Passport Photo with Aspect Ratio Protection (Smart Center-Cropping)
     if (loadedPassport) {
-        // Pixel coordinates mathematically matched to your Zazzau template layout boundary positions
-        const boxX = 166;
-        const boxY = 175;
-        const boxWidth = 268;
-        const boxHeight = 330;
+        // Destination constraints matching the template's white square perfectly
+        const destX = 166;
+        const destY = 175;
+        const destWidth = 268;
+        const destHeight = 330;
 
         ctx.save();
         ctx.beginPath();
-        ctx.rect(boxX, boxY, boxWidth, boxHeight);
-        ctx.clip(); // Mask bounding locks image securely inside border limits
+        ctx.rect(destX, destY, destWidth, destHeight);
+        ctx.clip(); // Locks drawings inside the boundaries
 
-        ctx.drawImage(loadedPassport, boxX, boxY, boxWidth, boxHeight);
+        // Calculate aspect ratios to emulate 'object-fit: cover' behavior
+        const imgWidth = loadedPassport.width;
+        const imgHeight = loadedPassport.height;
+        const imgRatio = imgWidth / imgHeight;
+        const destRatio = destWidth / destHeight;
+
+        let srcX = 0, srcY = 0, srcWidth = imgWidth, srcHeight = imgHeight;
+
+        if (imgRatio > destRatio) {
+            // Image is wider than the container -> Crop left/right edges
+            srcWidth = imgHeight * destRatio;
+            srcX = (imgWidth - srcWidth) / 2;
+        } else {
+            // Image is taller than the container -> Crop top/bottom edges
+            srcHeight = imgWidth / destRatio;
+            srcY = (imgHeight - srcHeight) / 2;
+        }
+
+        // Draw the smartly cropped image slice directly into the card frame area
+        ctx.drawImage(loadedPassport, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight);
         ctx.restore();
     }
 
-    // 3. Render Data Strings Overlays directly onto the card body parameters layout
+    // 3. Render Student Text Metadata Layers (Separated coordinates for pixel perfection)
     ctx.textAlign = "left";
-    ctx.fillStyle = "#FFFFFF"; // Premium contrast white layout printing configuration
-    ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+    ctx.fillStyle = "#FFFFFF"; // Solid crisp white contrast typography
 
-    // Text rendering alignment maps directly next to your template baseline headers labels
-    ctx.fillText(currentFields.name.toUpperCase() || "NOT SPECIFIED", 262, 595);
-    ctx.fillText(currentFields.matric.toUpperCase() || "NOT SPECIFIED", 328, 627);
-    ctx.fillText(currentFields.phone || "NOT SPECIFIED", 312, 659);
-    ctx.fillText(currentFields.level.toUpperCase() || "NOT SPECIFIED", 232, 691);
+    // Name Alignment: Push it to start immediately after the preprinted "Full Name:" label
+    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+    ctx.fillText(currentFields.name.toUpperCase() || "ENTER NAME", 295, 595);
+
+    // Matric Alignment: Moves next to "Matric/Form Number:" label
+    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+    ctx.fillText(currentFields.matric.toUpperCase() || "0000000000", 370, 627);
+
+    // Phone Alignment: Moves next to "Phone Number:" label
+    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+    ctx.fillText(currentFields.phone || "08123456789", 335, 659);
+
+    // Level Alignment: Moves next to "Level:" label
+    ctx.font = "bold 20px 'Segoe UI', Arial, sans-serif";
+    ctx.fillText(currentFields.level.toUpperCase() || "100 LEVEL", 245, 691);
 
     // 4. RUN ANTI-THEFT WATERMARK ENGINE OVER CANVAS FRAME
-    // Renders custom oblique transparent security tags across canvas preventing print execution manipulation
     ctx.save();
     ctx.font = "bold 22px Arial";
     ctx.fillStyle = "rgba(220, 38, 38, 0.22)"; // Highly descriptive semi-transparent alarm crimson tone matrix
@@ -507,7 +534,7 @@ async function uploadAndCommitRegistration(paymentReference) {
                 full_name,
                 student_id,
                 phone,
-                level, // Added level value tracking index mapping column data matrices
+                level, 
                 photo_url,
                 organization: "OFFICIAL_ZAZZAU",
                 payment_ref: paymentReference
